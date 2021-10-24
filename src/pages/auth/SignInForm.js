@@ -25,6 +25,8 @@ function SignInForm() {
 
 	const history = useHistory();
 
+	const [errors, setErrors] = useState({});
+
 	const handleChange = (e) => {
 		setSignInData({ ...signInData, [e.target.name]: e.target.value });
 	};
@@ -34,7 +36,9 @@ function SignInForm() {
 		try {
 			await axios.post("/dj-rest-auth/login/", signInData);
 			history.push("/");
-		} catch (err) {}
+		} catch (err) {
+			setErrors(err.response?.data);
+		}
 	};
 
 	return (
@@ -56,6 +60,11 @@ function SignInForm() {
 								onChange={handleChange}
 							/>
 						</Form.Group>
+						{errors.username?.map((message, idx) => (
+							<Alert variant="warning" key={idx}>
+								{message}
+							</Alert>
+						))}
 
 						<Form.Group
 							className={styles.Input}
@@ -70,12 +79,22 @@ function SignInForm() {
 								onChange={handleChange}
 							/>
 						</Form.Group>
+						{errors.password?.map((message, idx) => (
+							<Alert variant="warning" key={idx}>
+								{message}
+							</Alert>
+						))}
 						<Button
 							className={`${btnStyles.Button} ${btnStyles.Wide} ${btnStyles.Bright}`}
 							type="submit"
 						>
 							Sign In
 						</Button>
+						{errors.non_field_errors?.map((message, idx) => (
+							<Alert variant="warning" key={idx} className="mt-3">
+								{message}
+							</Alert>
+						))}
 					</Form>
 				</Container>
 				<Container className={`mt-3 ${appStyles.Content}`}>
