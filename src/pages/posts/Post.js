@@ -1,10 +1,12 @@
 import React from "react";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import Avatar from "../../components/Avatar";
 import styles from "../../styles/Post.module.css";
 import { axiosRes } from "../../api/axiosDefaults";
+import { MoreDropdown } from "../../components/MoreDropdown";
 
 const Post = (props) => {
   const {
@@ -25,6 +27,20 @@ const Post = (props) => {
 
   const currentUser = useCurrentUser();
   const isOwner = currentUser?.username === owner;
+  const history = useHistory();
+
+  const handleEdit = () => {
+    history.push(`/posts/${id}/edit`);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axiosRes.delete(`/posts/${id}`);
+      history.goBack();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleLike = async () => {
     try {
@@ -66,19 +82,24 @@ const Post = (props) => {
             <Avatar src={profile_image} height={55} />
             {owner}
           </Link>
-          <div className="d.flex align-items-center">
+          <div className="d-flex align-items-center">
             <span>{updated_at}</span>
-            {isOwner && postPage && "..."}
+            {isOwner && postPage && (
+              <MoreDropdown
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              />
+            )}
           </div>
         </Media>
       </Card.Body>
-      <Link to={`posts/${id}`}>
+      <Link to={`/posts/${id}`}>
         <Card.Img src={image} alt={title} />
       </Link>
       <Card.Body>
         {title && <Card.Title className="text-center">{title}</Card.Title>}
         {content && <Card.Text>{content}</Card.Text>}
-        <div className={styles.postBar}>
+        <div className={styles.PostBar}>
           {isOwner ? (
             <OverlayTrigger
               placement="top"
