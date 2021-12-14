@@ -6,6 +6,7 @@ import { createBootstrapComponent } from "react-bootstrap/esm/ThemeProvider";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import Asset from "../../components/Asset";
 import Profile from "./Profile";
+import { useProfileData } from "../../contexts/ProfileDataContext";
 
 const PopularProfiles = ({ mobile }) => {
   const { popularProfiles } = useProfileData();
