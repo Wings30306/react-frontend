@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import appStyles from "../../App.module.css";
 import { Container } from "react-bootstrap";
-import { axiosReq } from "../../api/axiosDefaults";
-import { createBootstrapComponent } from "react-bootstrap/esm/ThemeProvider";
-import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import Asset from "../../components/Asset";
 import Profile from "./Profile";
 import { useProfileData } from "../../contexts/ProfileDataContext";
